@@ -7,6 +7,7 @@ const config = {
         trustServerCertificate: true,
         trustedConnection: false,
         enableArithAbort: true,
+        
     },
     port: 1433 
 }

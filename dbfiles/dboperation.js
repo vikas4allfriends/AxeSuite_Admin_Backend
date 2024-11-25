@@ -1,24 +1,24 @@
-const config        = require('./dbConfig')
+const config        = require('./dbconfig.js')
 
   const sql                 = require('mssql')
 
 const getAllPerson = async () => {
   try {
     let pool = await sql.connect(config);
-    let persons = await pool.request().query("SELECT * FROM Person");
+    let persons = await pool.request().query("SELECT * FROM Students");
     console.log(persons);
     return persons;
   }
    catch (error) {
-    console.error('Error fetching all person:', error);
+    console.error('Error fetching all Students:', error);
   }
 }
 const createPerson = async(Person) => {
     try{
         let pool = await sql.connect(config);
         let persons = await pool.request().query(`
-            INSERT INTO Person (ID, NAME, Mobile_number, STATE)
-            VALUES (${Person.ID}, '${Person.NAME}', ${Person.Mobile_number}, '${Person.STATE}')
+            INSERT INTO Students (ID, NAME, CITY, STATE)
+            VALUES (${Person.ID}, '${Person.NAME}',' ${Person.CITY}', '${Person.STATE}')
         `);
         return persons;
     }
@@ -26,14 +26,28 @@ const createPerson = async(Person) => {
         console.log(error);
     }
   }
-
+//delet person 
 const deletePerson= async(ID)=>{
   let pool=await sql.connect(config);
-  let persons= await pool.request().query(`DELETE FROM PERSON WHERE ID=(${ID})`);
+  let persons= await pool.request().query(`DELETE FROM Students WHERE ID=(${ID})`);
   return persons;
+}
+
+//update person 
+const updatePerson = async(Person) => {
+  try {
+      let pool = await sql.connect(config);
+      let persons = await pool.request()
+      .query(`UPDATE Students SET NAME = '${Person.NAME}', CITY = '${Person.CITY}',STATE = '${Person.STATE}' WHERE ID = ${Person.ID}`);
+      return persons;
+  }
+  catch(error) {
+      console.log(error);
+  }
 }
 module.exports = {
     getAllPerson,
     createPerson,
-    deletePerson
+    deletePerson,
+    updatePerson
 }
